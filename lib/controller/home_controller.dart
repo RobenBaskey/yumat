@@ -12,21 +12,24 @@ class HomeController extends GetxController {
 
   bool _isProviderListLoading = false;
   List<Datum> _providerList = [];
+  List<Datum> _horiProviderList = [];
 
   bool get isProviderListLoading => _isProviderListLoading;
   List<Datum> get providerList => _providerList;
+  List<Datum> get horiProviderList => _horiProviderList;
 
   getProviderList() async {
     _isProviderListLoading = true;
     update();
     try {
       ApiResponse apiResponse = await homeRepo.getProviderList();
-      _providerList.clear();
+      _horiProviderList.clear();
       ProviderListModel model =
           ProviderListModel.fromJson(apiResponse.response!.data);
+      _providerList = model.data;
       for (var element in model.data) {
         if (element.highlight == 1) {
-          _providerList.add(element);
+          _horiProviderList.add(element);
         }
       }
     } on Exception catch (e) {
